@@ -1,10 +1,13 @@
+import { ScaleLoader } from "react-spinners"
+
 interface WewatherProps {
   children: React.ReactNode
   value: string
+  loading: boolean
 }
 
 const Weather: React.FC<WewatherProps> = ({
-  children, value
+  children, value, loading
 }) => {
   return (
     <div
@@ -55,7 +58,15 @@ const Weather: React.FC<WewatherProps> = ({
           animated
           "
         >
-          {value}
+          {
+            loading ?
+              <ScaleLoader
+                color="#fff"
+                height={70}
+                width={8}
+              />
+              : <>{value}</>
+          }
         </p>
       </div>
 

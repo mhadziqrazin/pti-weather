@@ -12,8 +12,12 @@ import { BiWind } from "react-icons/bi"
 import { Slide, ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 import Weather from "./components/Weather"
+import TypewriterComponent from "typewriter-effect"
 
 export default function Home() {
+  // state for loading indicator
+  const [loading, setLoading] = useState(false)
+
   // state for option choosen
   const [opt, setOpt] = useState("")
   const [latLon, setLatlon] = useState(false)
@@ -65,6 +69,7 @@ export default function Home() {
 
   // get the weather data
   const getData = async (e: React.FormEvent<HTMLFormElement>) => {
+    setLoading(true)
     e.preventDefault()
 
     if (latLon) {
@@ -108,14 +113,27 @@ export default function Home() {
       const data = await res.json()
       showData(data)
     }
+    setLoading(false)
   }
 
   // update weather data
   const showData = async (data: any) => {
     if (data === 'invalid') {
       toast.error('Cannot find your location :(')
+      setData({
+        temp: '-',
+        feels: '-',
+        humidity: '-',
+        wind: '-'
+      })
     } else if (data === 'internal') {
       toast.error("We're having problem :( Try again later.")
+      setData({
+        temp: '-',
+        feels: '-',
+        humidity: '-',
+        wind: '-'
+      })
     } else {
       setData({
         temp: data.temp,
@@ -150,11 +168,17 @@ export default function Home() {
           mt-10
           sm:mt-20
           mb-3
-          sm:mb-5
+          md:mb-6
           animated
         "
       >
-        Type any location...
+        Type any&nbsp;<TypewriterComponent
+          options={{
+            strings: ['location...', 'latitude/longitude', 'city', 'city & country'],
+            autoStart: true,
+            loop: true,
+          }}
+        />
       </div>
       <div
         className="
@@ -163,7 +187,8 @@ export default function Home() {
           text-tr
           text-gray-500
           place-content-center
-          sm:mb-2
+          my-4
+          md:my-6
         "
       >
         <a
@@ -180,7 +205,7 @@ export default function Home() {
             }
           `}
         >
-          Lat/Lon
+          Lat Lon
         </a>
         <a
           onClick={chooseCity}
@@ -212,7 +237,7 @@ export default function Home() {
             }
           `}
         >
-          City & Country
+          City, Country
         </a>
       </div>
 
@@ -231,7 +256,7 @@ export default function Home() {
       >
         <Input
           type="text"
-          placeholder="How's the weather in..."
+          placeholder="choose one of the three formats"
           value={search}
           disabled={disabledInput}
           onChange={(e) => { setSearch(e.target.value) }}
@@ -240,7 +265,9 @@ export default function Home() {
             text-sc
             text-center
             font-medium
-            h-8
+            h-7
+            sm:h-10
+            xl:h-12
             w-full
             text-white
             bg-transparent
@@ -282,20 +309,31 @@ export default function Home() {
           &nbsp;Search
         </Button>
       </form>
-      <div className="flex flex-col items-center justify-center gap-3 my-10">
-        <div className="flex gap-3">
-          <Weather value={`${data.temp}`}>
+      <div className="flex flex-col items-center justify-center gap-4 my-10">
+        <div className="flex gap-4">
+          <Weather
+            value={`${data.temp}`}
+            loading={loading}>
             <FaTemperatureHigh />Temp. (&deg;C)
           </Weather>
-          <Weather value={`${data.feels}`}>
+          <Weather
+            value={`${data.feels}`}
+            loading={loading}
+          >
             <BsPersonLinesFill />Feels like (&deg;C)
           </Weather>
         </div>
-        <div className="flex gap-3">
-          <Weather value={`${data.humidity}`}>
+        <div className="flex gap-4">
+          <Weather
+            value={`${data.humidity}`}
+            loading={loading}
+          >
             <IoIosWater />Humidity (%)
           </Weather>
-          <Weather value={`${data.wind}`}>
+          <Weather
+            value={`${data.wind}`}
+            loading={loading}
+          >
             <BiWind />Wind (km)
           </Weather>
         </div>
