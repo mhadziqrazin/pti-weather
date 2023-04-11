@@ -1,11 +1,13 @@
 'use client'
 
-import { useState } from "react";
-import Container from "./components/Container";
-import Input from "./components/Input";
-import useComponentDisabler from "./hooks/useComponentDisabler";
-import Button from "./components/Button";
+import { useState } from "react"
+import Container from "./components/Container"
+import Input from "./components/Input"
+import useComponentDisabler from "./hooks/useComponentDisabler"
+import Button from "./components/Button"
 import { FaSearchLocation } from "react-icons/fa"
+import { Slide, ToastContainer, toast } from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Home() {
   // state for option choosen
@@ -49,8 +51,78 @@ export default function Home() {
     setCountry(true)
   }
 
+  // get the weather data
+  const getData = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    if (latLon) {
+      try {
+        if (search.split(' ').length !== 2) {
+          throw new Error()
+        }
+      } catch {
+        toast.error('Please provide a correct format :)')
+        return
+      }
+
+      const lat = search.split(' ')[0]
+      const lon = search.split(' ')[1]
+
+      const res = await fetch(`/api/latlon/${lat}/${lon}`)
+      const data = await res.json()
+      showData(data)
+    }
+
+    else if (city) {
+      const res = await fetch(`/api/city/${search}`)
+      const data = await res.json()
+      showData(data)
+    }
+
+    else if (country) {
+      try {
+        if (search.split(', ').length !== 2) {
+          throw new Error()
+        }
+      } catch {
+        toast.error('Please provide a correct format :)')
+        return
+      }
+
+      const city = search.split(', ')[0]
+      const country = search.split(', ')[1]
+
+      const res = await fetch(`/api/country/${city}/${country}`)
+      const data = await res.json()
+      showData(data)
+    }
+  }
+
+  const showData = (data: string) => {
+    if (data === 'invalid') {
+      toast.error('Cannot find your city :(')
+    } else if (data === 'internal') {
+      toast.error("We're having problem :( Try again later.")
+    } else {
+      console.log(data)
+    }
+  }
+
   return (
     <Container>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover={false}
+        theme="colored"
+        transition={Slide}
+      />
       <div
         className="
           flex
@@ -126,6 +198,7 @@ export default function Home() {
         </a>
       </div>
       <form
+        onSubmit={getData}
         className="
           flex
           flex-col
@@ -145,7 +218,7 @@ export default function Home() {
           onChange={(e) => { setSearch(e.target.value) }}
           className={`
             px-2
-            text-tr
+            text-sc
             text-center
             font-medium
             h-8
@@ -171,7 +244,7 @@ export default function Home() {
             flex
             place-content-center
             items-center
-            text-tr
+            text-sc
             font-medium
             w-5/12
             py-1

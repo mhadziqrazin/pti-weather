@@ -18,6 +18,7 @@ const Input: React.FC<
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        spellCheck={false}
         {...props}
       />
     )
