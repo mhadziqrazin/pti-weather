@@ -62,7 +62,7 @@ const Weather: React.FC<WewatherProps> = ({
             loading ?
               <ScaleLoader
                 color="#fff"
-                height={70}
+                height={65}
                 width={8}
               />
               : <>{value}</>
