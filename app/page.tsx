@@ -5,9 +5,13 @@ import Container from "./components/Container"
 import Input from "./components/Input"
 import useComponentDisabler from "./hooks/useComponentDisabler"
 import Button from "./components/Button"
-import { FaSearchLocation } from "react-icons/fa"
+import { FaSearchLocation, FaTemperatureHigh } from "react-icons/fa"
+import { BsPersonLinesFill } from "react-icons/bs"
+import { IoIosWater } from "react-icons/io"
+import { BiWind } from "react-icons/bi"
 import { Slide, ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
+import Weather from "./components/Weather"
 
 export default function Home() {
   // state for option choosen
@@ -22,6 +26,14 @@ export default function Home() {
   // state for input & button search visibility
   const [disabledButton, setDisabledButton] = useState(true)
   const [disabledInput, setDisabledInput] = useState(true)
+
+  // state array of data that'll be shown
+  const [data, setData] = useState({
+    temp: '-',
+    feels: '-',
+    humidity: '-',
+    wind: '-'
+  })
 
   // disable input field when option not choosen
   useComponentDisabler(setDisabledInput, opt)
@@ -98,13 +110,19 @@ export default function Home() {
     }
   }
 
-  const showData = (data: string) => {
+  // update weather data
+  const showData = async (data: any) => {
     if (data === 'invalid') {
-      toast.error('Cannot find your city :(')
+      toast.error('Cannot find your location :(')
     } else if (data === 'internal') {
       toast.error("We're having problem :( Try again later.")
     } else {
-      console.log(data)
+      setData({
+        temp: data.temp,
+        feels: data.feels_like,
+        humidity: data.humidity,
+        wind: data.wind_speed
+      })
     }
   }
 
@@ -120,7 +138,7 @@ export default function Home() {
         pauseOnFocusLoss={false}
         draggable
         pauseOnHover={false}
-        theme="colored"
+        theme="dark"
         transition={Slide}
       />
       <div
@@ -197,6 +215,7 @@ export default function Home() {
           City & Country
         </a>
       </div>
+
       <form
         onSubmit={getData}
         className="
@@ -263,6 +282,24 @@ export default function Home() {
           &nbsp;Search
         </Button>
       </form>
+      <div className="flex flex-col items-center justify-center gap-3 my-10">
+        <div className="flex gap-3">
+          <Weather value={`${data.temp}`}>
+            <FaTemperatureHigh />Temp. (&deg;C)
+          </Weather>
+          <Weather value={`${data.feels}`}>
+            <BsPersonLinesFill />Feels like (&deg;C)
+          </Weather>
+        </div>
+        <div className="flex gap-3">
+          <Weather value={`${data.humidity}`}>
+            <IoIosWater />Humidity (%)
+          </Weather>
+          <Weather value={`${data.wind}`}>
+            <BiWind />Wind (km)
+          </Weather>
+        </div>
+      </div>
 
     </Container>
   )
