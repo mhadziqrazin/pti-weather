@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-const useButtonDisabler = (
+const useComponentDisabler = (
   effect: (condition: boolean) => (void | (() => void | undefined)),
   dependency: string
 ) => {
@@ -12,4 +12,4 @@ const useButtonDisabler = (
   }, [dependency])
 }
 
-export default useButtonDisabler
+export default useComponentDisabler

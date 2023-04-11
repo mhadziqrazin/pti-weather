@@ -3,18 +3,51 @@
 import { useState } from "react";
 import Container from "./components/Container";
 import Input from "./components/Input";
-import useButtonDisabler from "./hooks/useButtonDisabler";
+import useComponentDisabler from "./hooks/useComponentDisabler";
 import Button from "./components/Button";
+import { FaSearchLocation } from "react-icons/fa"
 
 export default function Home() {
-  // state for input search bar
+  // state for option choosen
+  const [opt, setOpt] = useState("")
+  const [latLon, setLatlon] = useState(false)
+  const [city, setCity] = useState(false)
+  const [country, setCountry] = useState(false)
+
+  // state for input search bar value
   const [search, setSearch] = useState("")
 
-  // state for button search visibility
-  const [disabled, setDisabled] = useState(true)
+  // state for input & button search visibility
+  const [disabledButton, setDisabledButton] = useState(true)
+  const [disabledInput, setDisabledInput] = useState(true)
+
+  // disable input field when option not choosen
+  useComponentDisabler(setDisabledInput, opt)
 
   // disable search button when input field empty
-  useButtonDisabler(setDisabled, search)
+  useComponentDisabler(setDisabledButton, search)
+
+  // functions to handle choosing option
+  const chooseLatLon = () => {
+    setOpt("latlon")
+    setLatlon(true)
+    setCity(false)
+    setCountry(false)
+  }
+
+  const chooseCity = () => {
+    setOpt("city")
+    setLatlon(false)
+    setCity(true)
+    setCountry(false)
+  }
+
+  const chooseCountry = () => {
+    setOpt("country")
+    setLatlon(false)
+    setCity(false)
+    setCountry(true)
+  }
 
   return (
     <Container>
@@ -44,35 +77,50 @@ export default function Home() {
         "
       >
         <a
-          href=""
-          className="
+          onClick={chooseLatLon}
+          className={`
             place-content-center
             sm:mb-2
             hover:text-white
+            hover:scale-110
+            cursor-pointer
             animated
-          "
+            ${latLon ?
+              "text-purple-400" : ""
+            }
+          `}
         >
           Lat/Lon
         </a>
         <a
-          href=""
-          className="
+          onClick={chooseCity}
+          className={`
             place-content-center
             sm:mb-2
             hover:text-white
+            hover:scale-110
+            cursor-pointer
             animated
-          "
+            ${city ?
+              "text-purple-400" : ""
+            }
+          `}
         >
           City
         </a>
         <a
-          href=""
-          className="
+          onClick={chooseCountry}
+          className={`
             place-content-center
             sm:mb-2
             hover:text-white
+            hover:scale-110
+            cursor-pointer
             animated
-          "
+            ${country ?
+              "text-purple-400" : ""
+            }
+          `}
         >
           City & Country
         </a>
@@ -93,8 +141,9 @@ export default function Home() {
           type="text"
           placeholder="How's the weather in..."
           value={search}
+          disabled={disabledInput}
           onChange={(e) => { setSearch(e.target.value) }}
-          className="
+          className={`
             px-2
             text-tr
             text-center
@@ -107,26 +156,38 @@ export default function Home() {
             border-purple-500
             rounded-sm
             outline-none
+            placeholder:italic
+            focus:placeholder:text-transparent
             animated
-          "
+            ${!disabledInput ?
+              "opacity-100" : "opacity-50 cursor-not-allowed"
+            }
+          `}
         />
         <Button
           type="submit"
-          disabled={disabled}
+          disabled={disabledButton}
           className={`
+            flex
+            place-content-center
+            items-center
             text-tr
             font-medium
-            w-3/6
-            py-2
-            px-4
+            w-5/12
+            py-1
+            px-2
             rounded-lg
             border-2
             border-purple-500
             animated
-            ${!disabled ? "hover:bg-black hover:text-purple-500 bg-purple-500 text-white" : "opacity-50 cursor-not-allowed bg-black text-purple-500"}
+            ${!disabledButton ?
+              "hover:bg-black hover:text-purple-500 bg-purple-500 text-white"
+              : "opacity-50 cursor-not-allowed bg-black text-purple-500"
+            }
           `}
         >
-          Search
+          <FaSearchLocation />
+          &nbsp;Search
         </Button>
       </form>
 

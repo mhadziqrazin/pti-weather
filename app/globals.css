@@ -31,6 +31,7 @@ body {
   @apply
     transition-all
     duration-300
+    ease-in-out
 }
 
 .text-pr {
