@@ -79,6 +79,7 @@ export default function Home() {
         }
       } catch {
         toast.error('Please provide a correct format :)')
+        setLoading(false)
         return
       }
 
@@ -103,6 +104,7 @@ export default function Home() {
         }
       } catch {
         toast.error('Please provide a correct format :)')
+        setLoading(false)
         return
       }
 
