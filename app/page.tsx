@@ -10,9 +10,13 @@ import { BsPersonLinesFill } from "react-icons/bs"
 import { IoIosWater } from "react-icons/io"
 import { BiWind } from "react-icons/bi"
 import { Slide, ToastContainer, toast } from "react-toastify"
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css"
 import Weather from "./components/Weather"
 import TypewriterComponent from "typewriter-effect"
+import chooseLatLon from "./utils/weather/chooseLatlon"
+import chooseCity from "./utils/weather/chooseCity"
+import chooseCountry from "./utils/weather/chooseCountry"
+import getWeatherData from "./utils/weather/getWeatherData"
 
 export default function Home() {
   // state for loading indicator
@@ -20,7 +24,7 @@ export default function Home() {
 
   // state for option choosen
   const [opt, setOpt] = useState("")
-  const [latLon, setLatlon] = useState(false)
+  const [latLon, setLatLon] = useState(false)
   const [city, setCity] = useState(false)
   const [country, setCountry] = useState(false)
 
@@ -44,107 +48,6 @@ export default function Home() {
 
   // disable search button when input field empty
   useComponentDisabler(setDisabledButton, search)
-
-  // functions to handle choosing option
-  const chooseLatLon = () => {
-    setOpt("latlon")
-    setLatlon(true)
-    setCity(false)
-    setCountry(false)
-  }
-
-  const chooseCity = () => {
-    setOpt("city")
-    setLatlon(false)
-    setCity(true)
-    setCountry(false)
-  }
-
-  const chooseCountry = () => {
-    setOpt("country")
-    setLatlon(false)
-    setCity(false)
-    setCountry(true)
-  }
-
-  // get the weather data
-  const getData = async (e: React.FormEvent<HTMLFormElement>) => {
-    setLoading(true)
-    e.preventDefault()
-
-    if (latLon) {
-      try {
-        if (search.split(' ').length !== 2) {
-          throw new Error()
-        }
-      } catch {
-        toast.error('Please provide a correct format :)')
-        setLoading(false)
-        return
-      }
-
-      const lat = search.split(' ')[0]
-      const lon = search.split(' ')[1]
-
-      const res = await fetch(`/api/latlon/${lat}/${lon}`)
-      const data = await res.json()
-      showData(data)
-    }
-
-    else if (city) {
-      const res = await fetch(`/api/city/${search}`)
-      const data = await res.json()
-      showData(data)
-    }
-
-    else if (country) {
-      try {
-        if (search.split(', ').length !== 2) {
-          throw new Error()
-        }
-      } catch {
-        toast.error('Please provide a correct format :)')
-        setLoading(false)
-        return
-      }
-
-      const city = search.split(', ')[0]
-      const country = search.split(', ')[1]
-
-      const res = await fetch(`/api/country/${city}/${country}`)
-      const data = await res.json()
-      showData(data)
-    }
-    setLoading(false)
-  }
-
-  // update weather data
-  const showData = async (data: any) => {
-    if (data === 'invalid') {
-      toast.error('Cannot find your location :(')
-      setData({
-        temp: '-',
-        feels: '-',
-        humidity: '-',
-        wind: '-'
-      })
-    } else if (data === 'internal') {
-      toast.error("We're having problem :( Try again later.")
-      setData({
-        temp: '-',
-        feels: '-',
-        humidity: '-',
-        wind: '-'
-      })
-    } else {
-      setData({
-        temp: data.temp,
-        feels: data.feels_like,
-        humidity: data.humidity,
-        wind: data.wind_speed
-      })
-    }
-  }
 
   return (
     <Container>
@@ -194,7 +97,9 @@ export default function Home() {
         "
       >
         <a
-          onClick={chooseLatLon}
+          onClick={() => {
+            chooseLatLon(setOpt, setLatLon, setCity, setCountry)
+          }}
           className={`
             place-content-center
             sm:mb-2
@@ -210,7 +115,9 @@ export default function Home() {
           Lat Lon
         </a>
         <a
-          onClick={chooseCity}
+          onClick={() => {
+            chooseCity(setOpt, setLatLon, setCity, setCountry)
+          }}
           className={`
             place-content-center
             sm:mb-2
@@ -226,7 +133,9 @@ export default function Home() {
           City
         </a>
         <a
-          onClick={chooseCountry}
+          onClick={() => {
+            chooseCountry(setOpt, setLatLon, setCity, setCountry)
+          }}
           className={`
             place-content-center
             sm:mb-2
@@ -244,7 +153,16 @@ export default function Home() {
       </div>
 
       <form
-        onSubmit={getData}
+        onSubmit={(e) => {
+          getWeatherData(
+            e,
+            setLoading,
+            latLon,
+            city,
+            country,
+            search,
+            setData)
+        }}
         className="
           flex
           flex-col
