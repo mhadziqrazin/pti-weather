@@ -23,10 +23,32 @@ const Movie: React.FC<Props> = (
   { movie }
 ) => {
   return (
-    <div className="bg-white text-black w-10">
+    <div
+      className="
+      bg-white
+      text-black
+        max-w-[18rem]
+        rounded-xl
+        rounded-t-2xl
+      "
+    >
+      <img
+        src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+        alt={`${movie.title}`}
+        className="rounded-t-xl"
+      />
       <p>{movie.title}</p>
       <p>{movie.vote_average}</p>
-      <p>{movie.overview}</p>
+      <p
+        className="
+          relative
+          h-0
+          overflow-hidden
+          hover:h-auto
+        "
+      >
+        {movie.overview}
+      </p>
     </div>
   )
 }

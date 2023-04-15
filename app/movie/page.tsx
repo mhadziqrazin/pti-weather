@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react"
 import Movie, { MovieProps } from "../components/Movie"
+import Container from "../components/Container"
 
 export default function Movies() {
   const [movies, setMovies] = useState<MovieProps[]>([])
@@ -11,7 +12,9 @@ export default function Movies() {
     const res = await fetch('/api/movie/all')
     const data = await res.json()
 
-    setMovies(data)
+    // if (data === 'internal')
+
+    setMovies(data.results)
     setLoading(false)
   }, [])
   useEffect(() => {
@@ -20,14 +23,17 @@ export default function Movies() {
 
 
   return (
-    <div>
-      {!loading ?
-        <div className="flex flex-wrap gap-2 place-content-center">
-          {movies.map((movie) => (
-            <Movie key={movie.id} movie={movie}></Movie>
-          ))}
-        </div> : <div>loading..</div>
-      }
-    </div>
+    <Container>
+      <div>
+        {!loading ?
+          <div className="flex flex-wrap gap-10 place-content-center">
+            {movies.map((movie) => (
+              <Movie key={movie.id} movie={movie}></Movie>
+            ))}
+          </div> : <div>loading..</div>
+        }
+      </div>
+    </Container>
+
   )
 }
