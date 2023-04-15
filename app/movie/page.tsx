@@ -1,16 +1,17 @@
 'use client'
 
 import { useCallback, useEffect, useState } from "react"
+import Movie, { MovieProps } from "../components/Movie"
 
 export default function Movies() {
-  const [data, setData] = useState()
+  const [movies, setMovies] = useState<MovieProps[]>([])
   const [loading, setLoading] = useState(false)
   const getMovies = useCallback(async () => {
     setLoading(true)
     const res = await fetch('/api/movie/all')
     const data = await res.json()
 
-    setData(data)
+    setMovies(data)
     setLoading(false)
   }, [])
   useEffect(() => {
@@ -19,15 +20,14 @@ export default function Movies() {
 
 
   return (
-    <div>{
-      loading ? <>loading</> : <>ada</>
-      }</div>
+    <div>
+      {!loading ?
+        <div className="flex flex-wrap gap-2 place-content-center">
+          {movies.map((movie) => (
+            <Movie key={movie.id} movie={movie}></Movie>
+          ))}
+        </div> : <div>loading..</div>
+      }
+    </div>
   )
-}
-
-const getMovies = async () => {
-  const res = await fetch('/api/movie/all')
-  const data = await res.json()
-
-  return data
 }

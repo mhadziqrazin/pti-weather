@@ -9,7 +9,7 @@ const Navbar = () => {
           <Link href={"/"}>
             <div className="text-pr font-bold animated">
               <span className="text-blue-500">
-                
+                PTI
               </span>
               &nbsp;
               <span className="text-red-500">
@@ -20,7 +20,7 @@ const Navbar = () => {
           <Link href={"/movie"}>
             <div className="text-pr font-bold animated">
               <span className="text-blue-500">
-                
+                PTI
               </span>
               &nbsp;
               <span className="text-red-500">
