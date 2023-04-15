@@ -47,6 +47,8 @@ const Movie: React.FC<Props> = (
           p-4
           flex
           place-content-between
+          gap-2
+          items-center
         "
       >
         <p>{movie.title}</p>
