@@ -13,7 +13,7 @@ export default function Movies() {
     const data = await res.json()
 
     // if (data === 'internal')
-
+    console.log(res)
     setMovies(data.results)
     setLoading(false)
   }, [])

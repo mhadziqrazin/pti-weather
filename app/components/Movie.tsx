@@ -66,7 +66,7 @@ const Movie: React.FC<Props> = (
           bg-gray-900
           text-white
           hover:drop-shadow-[0_0px_25px_rgba(0,0,0)]
-          rounded-t-xl
+          rounded-xl
           overflow-y-auto
           max-h-full
           translate-y-full
@@ -106,9 +106,7 @@ const Movie: React.FC<Props> = (
             Add to Watchlist
           </Button>
         </div>
-
       </div>
-
     </div>
 
   )
