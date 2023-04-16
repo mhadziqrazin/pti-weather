@@ -1,14 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { search: string } }
 ) {
-  const id = params.id
+
+  const query = params.search
   const res = await fetch(
-    `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.MOVIE_KEY}`,
-    {
-      credentials: 'include'
-    }
+    `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_KEY}&query=${query}`
   )
 
   // the movie api has internal server error
@@ -23,4 +21,5 @@ export async function GET(req: NextRequest,
 
   const data = await res.json()
   return NextResponse.json(data)
+
 }

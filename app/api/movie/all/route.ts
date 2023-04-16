@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
 
   // user input an invalid query
   else if (res.status >= 400) {
-    return NextResponse.json(res)
+    return NextResponse.json('invalid')
   }
 
   const data = await res.json()

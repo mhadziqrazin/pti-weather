@@ -1,14 +1,17 @@
 'use client'
 
 import { useCallback, useEffect, useState } from "react"
-import Movie, { MovieProps } from "../components/Movie"
-import Container from "../components/Container"
 import { Slide, ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import Link from "next/link"
-import Button from "../components/Button"
-import addWatchlist from "../utils/movie/addWatchlist"
 import { PacmanLoader, PulseLoader } from "react-spinners"
+import Movie, { MovieProps } from "@/app/components/Movie"
+import addWatchlist from "@/app/utils/movie/addWatchlist"
+import Container from "@/app/components/Container"
+import Button from "@/app/components/Button"
+import Input from "@/app/components/Input"
+import useComponentDisabler from "@/app/hooks/useComponentDisabler"
+import searchMovie from "@/app/utils/movie/searchMovie"
 
 export default function Movies() {
   // state of movies and the loading when fetching and add it
@@ -16,30 +19,19 @@ export default function Movies() {
   const [loading, setLoading] = useState(false)
   const [addLoading, setAddLoading] = useState(false)
 
-  // get movies from api
-  const getMovies = useCallback(async () => {
-    setLoading(true)
-    const res = await fetch('/api/movie/all')
-    const data = await res.json()
-
-    if (data === 'internal' || data === 'invalid') {
-      toast.error("Sorry we have problem here :(")
-      throw Error()
-    }
-
-    setMovies(data.results)
-    setLoading(false)
-  }, [])
-
-  useEffect(() => {
-    getMovies()
-  }, [getMovies])
-
   // add watchlist with toast
   const addWatchlistToast = (movie: MovieProps) => {
     addWatchlist(movie, setAddLoading)
     toast.success(`Success added movie: ${movie.title}!`)
   }
+
+  // state for input search bar value
+  const [search, setSearch] = useState("")
+
+  // state for input & button search visibility
+  const [disabledButton, setDisabledButton] = useState(true)
+  // disable search button when input field empty
+  useComponentDisabler(setDisabledButton, search)
 
   return (
     <Container>
@@ -56,29 +48,72 @@ export default function Movies() {
         theme="dark"
         transition={Slide}
       />
-      <div className="flex place-content-center gap-4 my-10">
-        <Link
-          href={`/movie/watchlist`}
-          className="
-            text-pr
-            hover:text-blue-300
-            hover:scale-110
+      <div className="mt-10">
+      <form
+        onSubmit={(e) => {
+          searchMovie(e, search, setLoading, setMovies)
+        }}
+        className="
+          flex
+          flex-col
+          gap-2
+          items-center
+          px-10
+          sm:px-36
+          md:px-40
+          xl:px-72
+        "
+      >
+        <Input
+          type="text"
+          placeholder="search movie"
+          value={search}
+          onChange={(e) => { setSearch(e.target.value) }}
+          className={`
+            px-2
+            text-sc
+            text-center
+            font-medium
+            h-7
+            sm:h-10
+            xl:h-12
+            w-full
+            text-white
+            bg-transparent
+            border-b-2
+            border-purple-500
+            rounded-sm
+            outline-none
+            placeholder:italic
+            focus:placeholder:text-transparent
             animated
-          "
-        >
-          Watchlist
-        </Link>
-        <Link
-          href={`/movie/search`}
-          className="
-            text-pr
-            hover:text-blue-300
-            hover:scale-110
+          `}
+        />
+        <Button
+          type="submit"
+          disabled={disabledButton}
+          className={`
+            flex
+            place-content-center
+            items-center
+            text-sc
+            font-medium
+            w-5/12
+            py-1
+            px-2
+            rounded-lg
+            border-2
+            border-purple-500
             animated
-          "
+            ${!disabledButton ?
+              "hover:bg-black hover:text-purple-500 bg-purple-500 text-white"
+              : "opacity-50 cursor-not-allowed bg-black text-purple-500"
+            }
+          `}
         >
-          Search
-        </Link>
+          &nbsp;Search
+        </Button>
+      </form>
       </div>
       <div className="p-10">
         {!loading ?
