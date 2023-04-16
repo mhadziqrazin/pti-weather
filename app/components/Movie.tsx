@@ -1,3 +1,5 @@
+import { SetStateAction, useState } from "react"
+import addWatchlist from "../utils/movie/addWatchlist"
 import Button from "./Button"
 
 export interface MovieProps {
@@ -19,10 +21,11 @@ export interface MovieProps {
 
 interface Props {
   movie: MovieProps
+  children: React.ReactNode
 }
 
 const Movie: React.FC<Props> = (
-  { movie }
+  { movie, children }
 ) => {
   return (
     <div
@@ -85,26 +88,7 @@ const Movie: React.FC<Props> = (
             {movie.overview}
           </p>
           <div className="flex place-content-center">
-            <Button
-              type="button"
-              disabled={false}
-              className="
-                font-medium
-                text-sc
-              text-gray-900
-              bg-blue-300
-                border-2
-              border-blue-300
-                hover:bg-transparent hover:text-blue-300
-                px-4
-                py-2
-                rounded-lg
-                w-fit
-                animated
-              "
-            >
-              Add to Watchlist
-            </Button>
+            {children}
           </div>
         </div>
       </div>
