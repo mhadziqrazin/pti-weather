@@ -39,8 +39,8 @@ export default function Watchlist() {
         &lt; Back to movie page
       </Link>
       {movies.length !== 0 ?
-        <div className="px-10">
-          <h1 className="text-pr text-center my-10 scale-125 animated">
+        <div className="p-10">
+          <h1 className="text-pr text-center mb-10 scale-125 animated">
             My Watchlist
           </h1>
           <div className="flex flex-wrap gap-10 place-content-center">

@@ -81,7 +81,7 @@ export default function Movies() {
             text-white
             bg-transparent
             border-b-2
-            border-purple-500
+            border-blue-300
             rounded-sm
             outline-none
             placeholder:italic
@@ -103,11 +103,11 @@ export default function Movies() {
             px-2
             rounded-lg
             border-2
-            border-purple-500
+            border-blue-300
             animated
             ${!disabledButton ?
-              "hover:bg-black hover:text-purple-500 bg-purple-500 text-white"
-              : "opacity-50 cursor-not-allowed bg-black text-purple-500"
+              "hover:bg-transparent hover:text-blue-300 bg-blue-300 text-black"
+              : "opacity-50 cursor-not-allowed bg-transparent text-blue-300"
             }
           `}
         >

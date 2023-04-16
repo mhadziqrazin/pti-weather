@@ -56,7 +56,7 @@ export default function Movies() {
         theme="dark"
         transition={Slide}
       />
-      <div className="flex place-content-center gap-4 my-10">
+      <div className="flex place-content-center gap-4 my-5">
         <Link
           href={`/movie/watchlist`}
           className="
