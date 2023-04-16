@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react"
 import Movie, { MovieProps } from "../components/Movie"
 import Container from "../components/Container"
+import { Slide, ToastContainer, toast } from "react-toastify"
 
 export default function Movies() {
   const [movies, setMovies] = useState<MovieProps[]>([])
@@ -12,8 +13,11 @@ export default function Movies() {
     const res = await fetch('/api/movie/all')
     const data = await res.json()
 
-    // if (data === 'internal')
-    console.log(res)
+    if (data === 'internal' || data === 'invalid') {
+      toast.error("Sorry we have problem here :(")
+      throw Error()
+    }
+
     setMovies(data.results)
     setLoading(false)
   }, [])
@@ -24,7 +28,20 @@ export default function Movies() {
 
   return (
     <Container>
-      <div>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover={false}
+        theme="dark"
+        transition={Slide}
+      />
+      <div className="px-10">
         {!loading ?
           <div className="flex flex-wrap gap-10 place-content-center">
             {movies.map((movie) => (
