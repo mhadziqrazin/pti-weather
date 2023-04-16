@@ -9,7 +9,7 @@ const useComponentDisabler = (
     // effect will be setDisabled
     // disabled is false when input field length > 0
     effect(!(dependency.length > 0))
-  }, [dependency])
+  }, [effect, dependency])
 }
 
 export default useComponentDisabler
