@@ -3,7 +3,7 @@ import Container from "../Container"
 
 const Navbar = () => {
   return (
-    <nav className="py-4">
+    <nav className="py-4 sticky top-0 z-50 bg-black">
       <Container>
         <div className="flex items-center justify-between">
           <Link href={"/"}>

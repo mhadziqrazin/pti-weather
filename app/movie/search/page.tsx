@@ -12,6 +12,7 @@ import Button from "@/app/components/Button"
 import Input from "@/app/components/Input"
 import useComponentDisabler from "@/app/hooks/useComponentDisabler"
 import searchMovie from "@/app/utils/movie/searchMovie"
+import Navbar from "@/app/components/navbar/MovieNav"
 
 export default function Movies() {
   // state of movies and the loading when fetching and add it
@@ -35,6 +36,7 @@ export default function Movies() {
 
   return (
     <Container>
+      <Navbar />
       <ToastContainer
         position="top-center"
         autoClose={3000}

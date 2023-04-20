@@ -3,6 +3,7 @@
 import Button from "@/app/components/Button"
 import Container from "@/app/components/Container"
 import Movie, { MovieProps } from "@/app/components/Movie"
+import Navbar from "@/app/components/navbar/MovieNav"
 import removeWatchlist from "@/app/utils/movie/removeWatchlist"
 import Link from "next/link"
 import { useEffect, useState } from "react"
@@ -22,6 +23,7 @@ export default function Watchlist() {
 
   return (
     <Container>
+      <Navbar />
       <ToastContainer
         position="top-center"
         autoClose={3000}

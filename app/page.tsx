@@ -17,6 +17,7 @@ import chooseLatLon from "./utils/weather/chooseLatlon"
 import chooseCity from "./utils/weather/chooseCity"
 import chooseCountry from "./utils/weather/chooseCountry"
 import getWeatherData from "./utils/weather/getWeatherData"
+import Navbar from "./components/navbar/Navbar"
 
 export default function Home() {
   // state for loading indicator
@@ -51,6 +52,7 @@ export default function Home() {
 
   return (
     <Container>
+      <Navbar />
       <ToastContainer
         position="top-center"
         autoClose={3000}

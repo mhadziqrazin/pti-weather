@@ -9,6 +9,7 @@ import Link from "next/link"
 import Button from "../components/Button"
 import addWatchlist from "../utils/movie/addWatchlist"
 import { PacmanLoader, PulseLoader } from "react-spinners"
+import Navbar from "../components/navbar/MovieNav"
 
 export default function Movies() {
   // state of movies and the loading when fetching and add it
@@ -43,6 +44,7 @@ export default function Movies() {
 
   return (
     <Container>
+      <Navbar />
       <ToastContainer
         position="top-center"
         autoClose={3000}
@@ -56,30 +58,6 @@ export default function Movies() {
         theme="dark"
         transition={Slide}
       />
-      <div className="flex place-content-center gap-4 my-5">
-        <Link
-          href={`/movie/watchlist`}
-          className="
-            text-pr
-            hover:text-blue-300
-            hover:scale-110
-            animated
-          "
-        >
-          Watchlist
-        </Link>
-        <Link
-          href={`/movie/search`}
-          className="
-            text-pr
-            hover:text-blue-300
-            hover:scale-110
-            animated
-          "
-        >
-          Search
-        </Link>
-      </div>
       <div className="p-10">
         {!loading ?
           <div className="flex flex-wrap gap-10 place-content-center">
